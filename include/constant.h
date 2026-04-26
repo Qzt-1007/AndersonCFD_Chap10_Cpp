@@ -1,5 +1,4 @@
 #pragma once
-#include <cstddef>
 
 constexpr int IMAX = 70;
 constexpr int JMAX = 70;
@@ -15,11 +14,11 @@ constexpr double LHORI = 0.00001;  // 平板长度
 
 constexpr double Tw = T0;
 constexpr double Pr = 0.71;
-constexpr double DynVis0 = 1.789e-5;  // 海平面处空气粘度
+constexpr double Vis0 = 1.789e-5;  // 海平面处空气粘度
 
 constexpr double Cv = R / (gamma - 1);
 constexpr double Cp = gamma * Cv;
 constexpr double Rho0 = p0 / (R * T0);
-constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / DynVis0;
+constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / Vis0;
 constexpr double e0 = Cv * T0;
-constexpr double k0 = DynVis0 * Cp / Pr;
+constexpr double k0 = Vis0 * Cp / Pr;
