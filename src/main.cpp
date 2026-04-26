@@ -39,8 +39,18 @@ Array3D createArray3D(int nx, int ny, int ncomp, double initVal = 0.0) {
 int main() {
     const double Dd = 5 * LHORI / ReL;
     const double LVERT = 5 * Dd;
-    const double Dx = LHORI/(IMAX-1);
-    const double Dy = LVERT/(JMAX-1); 
+    const double Dx = LHORI / (IMAX - 1);
+    const double Dy = LVERT / (JMAX - 1);
 
-    Array3D Q = createArray3D(IMAX,JMAX,4,0.0);
+    Array3D Q = createArray3D(IMAX, JMAX, 4, 0.0);
+
+    // 初值条件
+    for (int ii = 0; ii < IMAX; ii++) {
+        for (int jj = 0; jj < JMAX; jj++) {
+            Q[ii][jj][0] = Ma0 * a0;  // u
+            Q[ii][jj][1] = 0.0; //v
+            Q[ii][jj][2] = p0; //p
+            Q[ii][jj][3] = T0; //T
+        }
+    }
 }
