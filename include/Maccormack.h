@@ -1,6 +1,6 @@
 /*麦考马克方法*/
 #pragma once
-#include <Array.h>
+#include <FArray.h>
 #include <constant.h>
 
 #include <vector>
