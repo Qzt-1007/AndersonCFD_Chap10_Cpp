@@ -12,3 +12,5 @@ double Vis(double T) {
 double Therm_k(double Vis) { return Vis * Cp / Pr; }
 
 double Rho(double p, double T) { return p / (R * T); }
+
+double Sonic(double T) { return sqrt(gamma * R * T); }

@@ -1,6 +1,6 @@
 #pragma once
 
-//用于定义常量
+// 用于定义常量
 
 constexpr int IMAX = 70;
 constexpr int JMAX = 70;
@@ -24,3 +24,8 @@ constexpr double Rho0 = p0 / (R * T0);
 constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / Vis0;
 constexpr double e0 = Cv * T0;
 constexpr double k0 = Vis0 * Cp / Pr;
+constexpr double Dd = 5 * LHORI / ReL;
+constexpr double LVERT = 5 * Dd;
+constexpr double Dx = LHORI / (IMAX - 1);
+constexpr double Dy = LVERT / (JMAX - 1);
+constexpr double Cfl = 0.60;  // 柯朗数

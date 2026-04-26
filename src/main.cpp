@@ -18,10 +18,6 @@ Array3D createArray3D(int nx, int ny, int ncomp, double initVal = 0.0) {
 }
 
 int main() {
-    const double Dd = 5 * LHORI / ReL;
-    const double LVERT = 5 * Dd;
-    const double Dx = LHORI / (IMAX - 1);
-    const double Dy = LVERT / (JMAX - 1);
 
     Array3D Q = createArray3D(IMAX, JMAX, 4, 0.0);  // u,v,p,T
 
