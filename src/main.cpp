@@ -23,3 +23,10 @@ constexpr double Rho0 = p0 / (R * T0);
 constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / DynVis0;
 constexpr double e0 = Cv * T0;
 constexpr double k0 = DynVis0 * Cp / Pr;
+
+int main() {
+    const double Dd = 5 * LHORI / ReL;
+    const double LVERT = 5 * Dd;
+    const double Dx = LHORI/(IMAX-1);
+    const double Dy = LVERT/(JMAX-1); 
+}
