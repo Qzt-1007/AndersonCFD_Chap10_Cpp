@@ -24,4 +24,14 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             k[i][j] = (Vis[i][j] * Cp) / Pr;
         }
     }
+
+    // 预估步(前向差分)
+    for (int i = 0; i < IMAX; i++) {
+        for (int j = 0; j < JMAX; j++) {
+            U[i][j][0] = rho[i][j];                                                              // U1
+            U[i][j][1] = rho[i][j] * u[i][j];                                                    // U2
+            U[i][j][2] = rho[i][j] * v[i][j];                                                    // U3
+            U[i][j][3] = rho[i][j] * (e[i][j] + (u[i][j] * u[i][j] + v[i][j] * v[i][j]) / 2.0);  // U5
+        }
+    }
 }
