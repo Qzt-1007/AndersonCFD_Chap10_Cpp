@@ -24,6 +24,11 @@ constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / DynVis0;
 constexpr double e0 = Cv * T0;
 constexpr double k0 = DynVis0 * Cp / Pr;
 
+// 2D 数组类型别名
+using Array2D = std::vector<std::vector<double>>;
+
+Array2D createArray2D(int nx, int ny, double initVal = 0.0) { return Array2D(nx, std::vector<double>(ny, initVal)); }
+
 int main() {
     const double Dd = 5 * LHORI / ReL;
     const double LVERT = 5 * Dd;
