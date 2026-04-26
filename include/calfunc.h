@@ -10,3 +10,5 @@ double Vis(double T) {
 }
 
 double Therm_k(double Vis) { return Vis * Cp / Pr; }
+
+double Rho(double p, double T) { return p / (R * T); }

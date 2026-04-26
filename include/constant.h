@@ -1,5 +1,7 @@
 #pragma once
 
+//用于定义常量
+
 constexpr int IMAX = 70;
 constexpr int JMAX = 70;
 constexpr int MaxIter = 5000;

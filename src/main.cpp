@@ -1,7 +1,9 @@
+#include <calfunc.h>
 #include <constant.h>
 
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 // 2D 数组类型别名
 using Array2D = std::vector<std::vector<double>>;
