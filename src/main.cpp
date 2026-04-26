@@ -41,4 +41,6 @@ int main() {
     const double LVERT = 5 * Dd;
     const double Dx = LHORI/(IMAX-1);
     const double Dy = LVERT/(JMAX-1); 
+
+    Array3D Q = createArray3D(IMAX,JMAX,4,0.0);
 }
