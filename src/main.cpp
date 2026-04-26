@@ -12,3 +12,5 @@ constexpr double p0 = 101325.0;
 constexpr double gamma = 1.4;      // 绝热比
 constexpr double R = 287.0;        // 气体常数
 constexpr double LHORI = 0.00001;  // 平板长度
+
+constexpr double Tw = T0;
