@@ -7,7 +7,7 @@
 #include <vector>
 
 int main() {
-    Array3D Q = createArray3D(IMAX, JMAX, 8, 0.0);  // u,v,p,T,rho,e,Vis,k
+    Array3D Q = createArray3D(IMAX, JMAX, 4, 0.0);  // u,v,p,T
 
     // 初值条件
     for (int ii = 0; ii < IMAX; ii++) {
@@ -16,10 +16,6 @@ int main() {
             Q[ii][jj][1] = 0.0;                                // v
             Q[ii][jj][2] = p0;                                 // p
             Q[ii][jj][3] = T0;                                 // T
-            Q[ii][jj][4] = Q[ii][jj][2] / (R * Q[ii][jj][3]);  // rho
-            Q[ii][jj][5] = Cv * Q[ii][jj][3];                  // e
-            Q[ii][jj][6] = SutVis(Q[ii][jj][3]);               // Vis
-            Q[ii][jj][7] = Q[ii][jj][6] * Cp / Pr;             // k
         }
     }
 
