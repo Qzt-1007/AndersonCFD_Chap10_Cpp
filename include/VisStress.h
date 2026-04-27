@@ -5,11 +5,11 @@
 #include <stdexcept>
 #include <vector>
 
-Array2D Tau_xx(Array2D u, Array2D v, Array2D Vis, int indi)  // indi=0--前向差分,indi=1--后向差分
+Array2D Tau_xx(Array2D u, Array2D v, Array2D Vis, int indi = 0)  // indi=0--前向差分,indi=1--后向差分
 {
     Array2D Tau, dudx, dvdy = createArray2D(IMAX, JMAX, 0.0);
     for (int i = 0; i < IMAX; i++) {
-        for (int j = 0; j < JMAX; j++) {
+        for (int j = 0; j < JMAX; j++) {  // 对y始终用中心差分(除边界点)
             if (j == 0) {
                 dvdy[i][j] = (-3 * v[i][j] + 4 * v[i][j + 1] - v[i][j + 2]) / (2 * Dy);
             } else if (j == JMAX - 1) {
@@ -53,11 +53,11 @@ Array2D Tau_xx(Array2D u, Array2D v, Array2D Vis, int indi)  // indi=0--前向�
     return Tau;
 }
 
-Array2D Tau_yy(Array2D u, Array2D v, Array2D Vis, int indi)  // indi=0--前向差分,indi=1--后向差分
+Array2D Tau_yy(Array2D u, Array2D v, Array2D Vis, int indi = 0)  // indi=0--前向差分,indi=1--后向差分
 {
     Array2D Tau, dudx, dvdy = createArray2D(IMAX, JMAX, 0.0);
     for (int i = 0; i < IMAX; i++) {
-        for (int j = 0; j < JMAX; j++) {
+        for (int j = 0; j < JMAX; j++) {  // 对x始终用中心差分(除边界点)
             if (j == 0) {
                 dudx[i][j] = (-3 * u[i][j] + 4 * u[i][j + 1] - u[i][j + 2]) / (2 * Dx);
             } else if (j == JMAX - 1) {
@@ -101,10 +101,10 @@ Array2D Tau_yy(Array2D u, Array2D v, Array2D Vis, int indi)  // indi=0--前向�
     return Tau;
 }
 
-Array2D Tau_xy_E(Array2D u, Array2D v, Array2D Vis, int indi) {  // 计算E项中的tau_xy,E在方程中以pe/px形式存在
+Array2D Tau_xy_E(Array2D u, Array2D v, Array2D Vis, int indi = 0) {  // 计算E项中的tau_xy,E在方程中以pe/px形式存在
     Array2D Tau, dudy, dvdx = createArray2D(IMAX, JMAX, 0.0);
     for (int i = 0; i < IMAX; i++) {
-        for (int j = 0; j < JMAX; j++) {
+        for (int j = 0; j < JMAX; j++) {  // 对y始终用中心差分(除边界点)
             if (j == 0) {
                 dudy[i][j] = (-3 * u[i][j] + 4 * u[i][j + 1] - u[i][j + 2]) / (2 * Dy);
             } else if (j == JMAX - 1) {
@@ -146,10 +146,10 @@ Array2D Tau_xy_E(Array2D u, Array2D v, Array2D Vis, int indi) {  // 计算E项�
     return Tau;
 }
 
-Array2D Tau_xy_F(Array2D u, Array2D v, Array2D Vis, int indi) {  // 计算F项中的tau_xy,E在方程中以pF/py形式存在
+Array2D Tau_xy_F(Array2D u, Array2D v, Array2D Vis, int indi = 0) {  // 计算F项中的tau_xy,E在方程中以pF/py形式存在
     Array2D Tau, dudy, dvdx = createArray2D(IMAX, JMAX, 0.0);
     for (int i = 0; i < IMAX; i++) {
-        for (int j = 0; j < JMAX; j++) {
+        for (int j = 0; j < JMAX; j++) {  // 对x始终用中心差分(除边界点)
             if (j == 0) {
                 dvdx[i][j] = (-3 * v[i][j] + 4 * v[i][j + 1] - v[i][j + 2]) / (2 * Dx);
             } else if (j == JMAX - 1) {
