@@ -1,12 +1,11 @@
 /*麦考马克方法*/
 #pragma once
+#include <BoundaryCond.h>
 #include <FArray.h>
 #include <Tstep.h>
 #include <VisStress.h>
 #include <calfunc.h>
 #include <constant.h>
-
-#include <vector>
 
 // 计算热流量的函数
 Array2D q_x(Array2D, Array2D, int);
@@ -80,6 +79,9 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
         }
     }
     pQ = Calc_Prim(pU);
+    // 应用边界条件
+    pQ = ApplyBoundaryCond(pQ);
+    
     // 预估步更新
     for (int i = 0; i < IMAX; i++) {
         for (int j = 0; j < JMAX; j++) {
