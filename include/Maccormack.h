@@ -120,8 +120,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
         }
     }
     // 校正步-后向差分(只计算内部网格点)
-    for (int i = 0; i < IMAX - 1; i++) {
-        for (int j = 0; j < JMAX - 1; j++) {
+    for (int i = 1; i < IMAX - 1; i++) {
+        for (int j = 1; j < JMAX - 1; j++) {
             for (int k = 0; k < 4; k++) {
                 U[i][j][k] = 0.5 * (U[i][j][k] + pU[i][j][k] - (Dt / Dx) * (E[i][j][k] - E[i - 1][j][k]) -
                                     (Dt / Dy) * (F[i][j][k] - F[i][j - 1][k]));
