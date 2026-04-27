@@ -31,7 +31,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             rho[i][j] = p[i][j] / (R * T[i][j]);
             e[i][j] = Cv * T[i][j];
             Vis[i][j] = SutVis(T[i][j]);
-            k[i][j] = (Vis[i][j] * Cp) / Pr;
+            k[i][j] = Therm_k(Vis[i][j]);
         }
     }
 
