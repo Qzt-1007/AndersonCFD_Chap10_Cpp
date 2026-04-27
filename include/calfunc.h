@@ -14,3 +14,17 @@ double Therm_k(double SutVis) { return SutVis * Cp / Pr; }
 double Rho(double p, double T) { return p / (R * T); }
 
 double Sonic(double T) { return sqrt(gamma * R * T); }
+
+// 根据U反解出原始量(Q:u,v,p,t)
+Array3D Calc_Prim(Array3D U) {
+    Array3D Q = createArray3D(IMAX, JMAX, 4, 0.0);  // Q:u,v,p,t
+    for (int i = 0; i < IMAX; i++) {
+        for (int j = 0; j < JMAX; j++) {
+            Q[i][j][0] = U[i][j][1] / U[i][j][0];
+            Q[i][j][1] = U[i][j][2] / U[i][j][1];
+            Q[i][j][3] = (U[i][j][3] / U[i][j][0] - 0.50 * (Q[i][j][0] * Q[i][j][0] + Q[i][j][1] * Q[i][j][0])) / Cv;
+            Q[i][j][2] = U[i][j][0] * R * Q[i][j][3];
+        }
+    }
+    return Q;
+}

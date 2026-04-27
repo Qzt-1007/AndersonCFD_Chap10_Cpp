@@ -19,6 +19,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     Array2D Tauxx, Tauyy, Tauxy = createArray2D(IMAX, JMAX, 0.0);
     Array2D qx, qy = createArray2D(IMAX, JMAX, 0.0);
     Array3D pU, pE, pF = createArray3D(IMAX, JMAX, 4, 0.0);
+    Array3D pQ = createArray3D(IMAX,JMAX,4,0.0);//存储预估步结果
     double Dt = 0.0;
 
     // 初始化
@@ -78,6 +79,47 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             }
         }
     }
+    pQ = Calc_Prim(pU);
+    // 预估步更新
+    for (int i = 0; i < IMAX; i++) {
+        for (int j = 0; j < JMAX; j++) {
+            u[i][j] = pQ[i][j][0];
+            v[i][j] = pQ[i][j][1];
+            p[i][j] = pQ[i][j][2];
+            T[i][j] = pQ[i][j][3];
+            rho[i][j] = p[i][j] / (R * T[i][j]);
+            e[i][j] = Cv * T[i][j];
+            Vis[i][j] = SutVis(T[i][j]);
+            k[i][j] = Therm_k(Vis[i][j]);
+        }
+    }
+
+    //校正步准备(后向差分)
+    // 为计算E,计算每个点上的切应力和热流量
+    Tauxx = Tau_xx(u, v, Vis, 0);  // 预估步后向差分,对应的切应力前向差分
+    Tauxy = Tau_xy_E(u, v, Vis, 0);
+    qx = q_x(T, k, 0);
+    for (int i = 0; i < IMAX; i++) {
+        for (int j = 0; j < JMAX; j++) {                                         // 计算每个网格点上的E
+            E[i][j][0] = rho[i][j] * u[i][j];                                    // E1
+            E[i][j][1] = rho[i][j] * u[i][j] * u[i][j] + p[i][j] - Tauxx[i][j];  // E2
+            E[i][j][2] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];            // E3
+            E[i][j][3] = (U[i][j][3] + p[i][j]) - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
+        }
+    }
+    // 为计算F,计算每个点上的切应力和热流量
+    Tauyy = Tau_yy(u, v, Vis, 0);
+    Tauxy = Tau_xy_F(u, v, Vis, 0);
+    qy = q_y(T, k, 0);
+    for (int i = 0; i < IMAX; i++) {
+        for (int j = 0; j < JMAX; j++) {  // 计算每个网格点上的F
+            F[i][j][0] = rho[i][j] * v[i][j];
+            F[i][j][1] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];
+            F[i][j][2] = rho[i][j] * v[i][j] * v[i][j] + p[i][j] - Tauyy[i][j];
+            F[i][j][3] = (U[i][j][3] + p[i][j]) - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
+        }
+    }
+
 }
 
 Array2D q_x(Array2D T, Array2D k, int indi = 0) {
