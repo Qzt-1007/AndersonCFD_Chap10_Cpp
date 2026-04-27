@@ -19,7 +19,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     Array2D Tauxx, Tauyy, Tauxy = createArray2D(IMAX, JMAX, 0.0);
     Array2D qx, qy = createArray2D(IMAX, JMAX, 0.0);
     Array3D pU, pE, pF = createArray3D(IMAX, JMAX, 4, 0.0);
-    Array3D pQ = createArray3D(IMAX,JMAX,4,0.0);//存储预估步结果
+    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);  // 存储预估步结果
     double Dt = 0.0;
 
     // 初始化
@@ -94,8 +94,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
         }
     }
 
-    //校正步准备(后向差分)
-    // 为计算E,计算每个点上的切应力和热流量
+    // 校正步准备(后向差分)
+    //  为计算E,计算每个点上的切应力和热流量
     Tauxx = Tau_xx(u, v, Vis, 0);  // 预估步后向差分,对应的切应力前向差分
     Tauxy = Tau_xy_E(u, v, Vis, 0);
     qx = q_x(T, k, 0);
@@ -119,7 +119,15 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             F[i][j][3] = (U[i][j][3] + p[i][j]) - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
         }
     }
-
+    // 校正步-后向差分(只计算内部网格点)
+    for (int i = 0; i < IMAX - 1; i++) {
+        for (int j = 0; j < JMAX - 1; j++) {
+            for (int k = 0; k < 4; k++) {
+                U[i][j][k] = 0.5 * (U[i][j][k] + pU[i][j][k] - (Dt / Dx) * (E[i][j][k] - E[i - 1][j][k]) -
+                                    (Dt / Dy) * (F[i][j][k] - F[i][j - 1][k]));
+            }
+        }
+    }
 }
 
 Array2D q_x(Array2D T, Array2D k, int indi = 0) {
