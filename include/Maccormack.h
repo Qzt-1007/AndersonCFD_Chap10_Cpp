@@ -19,6 +19,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     Array2D qx, qy = createArray2D(IMAX, JMAX, 0.0);
     Array3D pU, pE, pF = createArray3D(IMAX, JMAX, 4, 0.0);
     Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);  // 存储预估步结果
+    Array3D ResQ = createArray3D(IMAX, JMAX, 4, 0.0);
     double Dt = 0.0;
 
     // 初始化
@@ -81,7 +82,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     pQ = Calc_Prim(pU);
     // 应用边界条件
     pQ = ApplyBoundaryCond(pQ);
-    
+
     // 预估步更新
     for (int i = 0; i < IMAX; i++) {
         for (int j = 0; j < JMAX; j++) {
@@ -130,6 +131,10 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             }
         }
     }
+    ResQ = Calc_Prim(U);
+    ResQ = ApplyBoundaryCond(ResQ);
+
+    return ResQ;
 }
 
 Array2D q_x(Array2D T, Array2D k, int indi = 0) {
