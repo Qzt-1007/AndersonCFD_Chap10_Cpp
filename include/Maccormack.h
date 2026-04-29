@@ -13,12 +13,29 @@ Array2D q_y(Array2D, Array2D, int);
 
 Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
 {
-    Array2D u, v, p, T, rho, e, Vis, k = createArray2D(IMAX, JMAX, 0.0);
-    Array3D U, E, F = createArray3D(IMAX, JMAX, 4);  // U,E,F有4个分量
-    Array2D Tauxx, Tauyy, Tauxy = createArray2D(IMAX, JMAX, 0.0);
-    Array2D qx, qy = createArray2D(IMAX, JMAX, 0.0);
-    Array3D pU, pE, pF = createArray3D(IMAX, JMAX, 4, 0.0);
-    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);  // 存储预估步结果
+    Array2D u = createArray2D(IMAX, JMAX, 0.0);
+    Array2D v = createArray2D(IMAX, JMAX, 0.0);
+    Array2D p = createArray2D(IMAX, JMAX, 0.0);
+    Array2D T = createArray2D(IMAX, JMAX, 0.0);
+    Array2D rho = createArray2D(IMAX, JMAX, 0.0);
+    Array2D e = createArray2D(IMAX, JMAX, 0.0);
+    Array2D Vis = createArray2D(IMAX, JMAX, 0.0);
+    Array2D k = createArray2D(IMAX, JMAX, 0.0);
+
+    Array3D U = createArray3D(IMAX, JMAX, 4, 0.0);
+    Array3D E = createArray3D(IMAX, JMAX, 4, 0.0);
+    Array3D F = createArray3D(IMAX, JMAX, 4, 0.0);
+
+    Array2D Tauxx = createArray2D(IMAX, JMAX, 0.0);
+    Array2D Tauyy = createArray2D(IMAX, JMAX, 0.0);
+    Array2D Tauxy = createArray2D(IMAX, JMAX, 0.0);
+
+    Array2D qx = createArray2D(IMAX, JMAX, 0.0);
+    Array2D qy = createArray2D(IMAX, JMAX, 0.0);
+
+    Array3D pU = createArray3D(IMAX, JMAX, 4, 0.0);
+    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);
+
     Array3D ResQ = createArray3D(IMAX, JMAX, 4, 0.0);
     double Dt = 0.0;
 

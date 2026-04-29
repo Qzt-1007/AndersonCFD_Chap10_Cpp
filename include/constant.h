@@ -4,7 +4,7 @@
 
 constexpr int IMAX = 70;
 constexpr int JMAX = 70;
-constexpr int MaxIter = 5000;
+constexpr int MaxIter = 6000;
 
 constexpr double Ma0 = 4.0;
 constexpr double T0 = 288.16;  // 海平面温度，也是来流温度

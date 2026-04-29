@@ -1,14 +1,31 @@
+#include <Conver.h>
 #include <FArray.h>
 #include <Maccormack.h>
 #include <calfunc.h>
 #include <constant.h>
 
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
+// 输出物面压力分布
+void outputSurfacePressure(const Array3D& Q, int Iter) {
+    std::cout << "\n========== 迭代步 " << Iter << " ==========\n";
+    std::cout << "物面 (j=0) 压力分布 p[i][0]:\n";
+    std::cout << std::setw(6) << "i" << std::setw(15) << "p" << std::endl;
+    for (int i = 0; i < IMAX; ++i) {
+        double p_surface = Q[i][0][2];  // Q[i][j][2] 存储压力
+        std::cout << std::setw(6) << i << std::setw(15) << p_surface << std::endl;
+    }
+    std::cout << std::endl;
+}
+
 int main() {
-    Array3D Q = createArray3D(IMAX, JMAX, 4, 0.0);  // u,v,p,T
+    Array3D Q = createArray3D(IMAX, JMAX, 4);  // u,v,p,T
+    Array3D Q1 = createArray3D(IMAX, JMAX, 4);
+    Array2D p = createArray2D(IMAX, JMAX);
+    Array2D p1 = createArray2D(IMAX, JMAX);
 
     // 初值
     for (int ii = 1; ii < IMAX - 1; ii++) {
@@ -21,4 +38,26 @@ int main() {
     }
     // 边界条件
     Q = ApplyBoundaryCond(Q);
+
+    for (int Iter = 1; Iter < MaxIter + 1; Iter++) {
+        Q1 = Maccormack(Q);
+        for (int i = 0; i < IMAX; i++) {
+            for (int j = 0; j < JMAX; j++) {
+                p[i][j] = Q[i][j][2];
+                p1[i][j] = Q1[i][j][2];
+            }
+        }
+        if (Conver(p, p1)) {
+            copyArray3D(Q1, Q);
+            break;
+        } else {
+            copyArray3D(Q1, Q);
+        }
+        if (Iter == 1 || Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
+
+        if (Iter == 1 || Iter % 1000 == 0) {
+            outputSurfacePressure(Q1, Iter);  // 输出迭代后的结果
+        }
+    }
+    return 0;
 }
