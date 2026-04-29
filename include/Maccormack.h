@@ -96,6 +96,20 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             }
         }
     }
+    // 对pU的边界采取插值处理
+    //(这里插什么值都不要紧非0就行)
+    for (int i = 0; i < IMAX - 1; i++) {
+        for (int k = 0; k < 4; k++) {
+            pU[i][JMAX - 1][k] = pU[i][JMAX-2][k];
+        }
+    }
+    for(int j=0;j<JMAX;j++){
+        for(int k=0;k<4;k++){
+            pU[IMAX-1][j][k] = pU[IMAX-2][j][k];
+        }
+    }
+
+
     pQ = Calc_Prim(pU);
     // 应用边界条件
     pQ = ApplyBoundaryCond(pQ);
@@ -116,7 +130,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
 
     // 校正步准备(后向差分)
     //  为计算E,计算每个点上的切应力和热流量
-    Tauxx = Tau_xx(u, v, Vis, 0);  // 预估步后向差分,对应的切应力前向差分
+    Tauxx = Tau_xx(u, v, Vis, 0);  // 校正步后向差分,对应的切应力前向差分
     Tauxy = Tau_xy_E(u, v, Vis, 0);
     qx = q_x(T, k, 0);
     for (int i = 0; i < IMAX; i++) {
@@ -160,9 +174,9 @@ Array2D q_x(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (i == IMAX - 1) {
-                    q[i][j] = k[i][j] * (-3 * T[i][j] + 4 * T[i - 1][j] - T[i - 2][j]) / (2 * Dx);
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i - 1][j] - T[i - 2][j]) / (2 * Dx);
                 } else {
-                    q[i][j] = k[i][j] * (T[i + 1][j] - T[i][j]) / Dx;
+                    q[i][j] = -k[i][j] * (T[i + 1][j] - T[i][j]) / Dx;
                 }
             }
         }
@@ -170,9 +184,9 @@ Array2D q_x(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (i == 0) {
-                    q[i][j] = k[i][j] * (-3 * T[i][j] + 4 * T[i + 1][j] - T[i + 2][j]) / (2 * Dx);
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i + 1][j] - T[i + 2][j]) / (2 * Dx);
                 } else {
-                    q[i][j] = k[i][j] * (T[i][j] - T[i - 1][j]) / Dx;
+                    q[i][j] = -k[i][j] * (T[i][j] - T[i - 1][j]) / Dx;
                 }
             }
         }

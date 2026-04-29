@@ -78,7 +78,7 @@ Array2D Tau_yy(Array2D u, Array2D v, Array2D Vis, int indi = 0)  // indi=0--前�
                 if (j == JMAX - 1) {
                     dvdy[i][j] = (-3 * v[i][j] + 4 * v[i][j - 1] - v[i][j - 2]) / (2 * Dy);
                 } else {
-                    dvdy[i][j] = (v[i][j + 1] - v[i][j]) / Dx;
+                    dvdy[i][j] = (v[i][j + 1] - v[i][j]) / Dy;
                 }
             }
         }
@@ -160,7 +160,7 @@ Array2D Tau_xy_F(Array2D u, Array2D v, Array2D Vis, int indi = 0) {  // 计算F�
         for (int j = 0; j < JMAX; j++) {  // 对x始终用中心差分(除边界点)
             if (i == 0) {
                 dvdx[i][j] = (-3 * v[i][j] + 4 * v[i + 1][j] - v[i + 2][j]) / (2 * Dx);
-            } else if (i == JMAX - 1) {
+            } else if (i == IMAX - 1) {
                 dvdx[i][j] = (-3 * v[i][j] + 4 * v[i - 1][j] - v[i - 2][j]) / (2 * Dx);
             } else {
                 dvdx[i][j] = (v[i + 1][j] - v[i - 1][j]) / (2 * Dx);

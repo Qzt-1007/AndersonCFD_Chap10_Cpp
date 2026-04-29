@@ -48,10 +48,10 @@ int main() {
             }
         }
         if (Conver(p, p1)) {
-            copyArray3D(Q1, Q);
+            Q = Q1;
             break;
         } else {
-            copyArray3D(Q1, Q);
+            Q = Q1;
         }
         if (Iter == 1 || Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
 
