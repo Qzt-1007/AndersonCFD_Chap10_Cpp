@@ -202,9 +202,9 @@ Array2D q_y(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (j == JMAX - 1) {
-                    q[i][j] = k[i][j] * (-3 * T[i][j] + 4 * T[i][j - 1] - T[i][j - 2]) / (2 * Dy);
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j - 1] - T[i][j - 2]) / (2 * Dy);
                 } else {
-                    q[i][j] = k[i][j] * (T[i][j + 1] - T[i][j]) / Dy;
+                    q[i][j] = -k[i][j] * (T[i][j + 1] - T[i][j]) / Dy;
                 }
             }
         }
@@ -212,9 +212,9 @@ Array2D q_y(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (j == 0) {
-                    q[i][j] = k[i][j] * (-3 * T[i][j] + 4 * T[i][j + 1] - T[i][j + 2]) / (2 * Dy);
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j + 1] - T[i][j + 2]) / (2 * Dy);
                 } else {
-                    q[i][j] = k[i][j] * (T[i][j] - T[i][j - 1]) / Dy;
+                    q[i][j] = -k[i][j] * (T[i][j] - T[i][j - 1]) / Dy;
                 }
             }
         }

@@ -1,31 +1,31 @@
 #pragma once
-
+#include <cmath>
 // 用于定义常量
 
-constexpr int IMAX = 70;
-constexpr int JMAX = 70;
-constexpr int MaxIter = 6000;
+const int IMAX = 70;
+const int JMAX = 70;
+const int MaxIter = 6000;
 
-constexpr double Ma0 = 4.0;
-constexpr double T0 = 288.16;  // 海平面温度，也是来流温度
-constexpr double a0 = 340.28;
-constexpr double p0 = 101325.0;
-constexpr double gamma = 1.4;      // 绝热比
-constexpr double R = 287.0;        // 气体常数
-constexpr double LHORI = 0.00001;  // 平板长度
+const double Ma0 = 4.0;
+const double T0 = 288.16;  // 海平面温度，也是来流温度
+const double a0 = 340.28;
+const double p0 = 101325.0;
+const double gamma = 1.4;      // 绝热比
+const double R = 287.0;        // 气体常数
+const double LHORI = 0.00001;  // 平板长度
 
-constexpr double Tw = T0;
-constexpr double Pr = 0.71;
-constexpr double Vis0 = 1.789e-5;  // 海平面处空气粘度
+const double Tw = T0;
+const double Pr = 0.71;
+const double Vis0 = 1.789e-5;  // 海平面处空气粘度
 
-constexpr double Cv = R / (gamma - 1);
-constexpr double Cp = gamma * Cv;
-constexpr double Rho0 = p0 / (R * T0);
-constexpr double ReL = Rho0 * (Ma0 * a0) * LHORI / Vis0;
-constexpr double e0 = Cv * T0;
-constexpr double k0 = Vis0 * Cp / Pr;
-constexpr double Dd = 5 * LHORI / ReL;
-constexpr double LVERT = 5 * Dd;
-constexpr double Dx = LHORI / (IMAX - 1);
-constexpr double Dy = LVERT / (JMAX - 1);
-constexpr double Cfl = 0.60;  // 柯朗数
+const double Cv = R / (gamma - 1);
+const double Cp = gamma * Cv;
+const double Rho0 = p0 / (R * T0);
+const double ReL = Rho0 * (Ma0 * a0) * LHORI / Vis0;
+const double e0 = Cv * T0;
+const double k0 = Vis0 * Cp / Pr;
+const double Dd = 5 * LHORI / sqrt(ReL);
+const double LVERT = 5 * Dd;
+const double Dx = LHORI / (IMAX - 1);
+const double Dy = LVERT / (JMAX - 1);
+const double Cfl = 0.60;  // 柯朗数
