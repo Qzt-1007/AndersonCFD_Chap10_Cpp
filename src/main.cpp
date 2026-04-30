@@ -24,8 +24,8 @@ void outputSurfacePressure(const Array3D& Q, int Iter) {
 int main() {
     Array3D Q = createArray3D(IMAX, JMAX, 4);  // u,v,p,T
     Array3D Q1 = createArray3D(IMAX, JMAX, 4);
-    Array2D p = createArray2D(IMAX, JMAX);
-    Array2D p1 = createArray2D(IMAX, JMAX);
+    Array2D rho = createArray2D(IMAX, JMAX);
+    Array2D rho1 = createArray2D(IMAX, JMAX);
 
     // 初值
     for (int ii = 1; ii < IMAX - 1; ii++) {
@@ -43,11 +43,11 @@ int main() {
         Q1 = Maccormack(Q);
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
-                p[i][j] = Q[i][j][2];
-                p1[i][j] = Q1[i][j][2];
+                rho[i][j] = Q[i][j][2] / (R * Q[i][j][3]);
+                rho1[i][j] = Q1[i][j][2] / (R * Q1[i][j][3]);
             }
         }
-        if (Conver(p, p1)) {
+        if (Conver(rho, rho1)) {
             Q = Q1;
             break;
         } else {

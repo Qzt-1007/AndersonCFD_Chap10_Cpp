@@ -33,8 +33,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     Array2D qx = createArray2D(IMAX, JMAX, 0.0);
     Array2D qy = createArray2D(IMAX, JMAX, 0.0);
 
-    Array3D pU = createArray3D(IMAX, JMAX, 4, 0.0);
-    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);
+    Array3D pU = createArray3D(IMAX, JMAX, 4, 0.0001);
+    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0001);
 
     Array3D ResQ = createArray3D(IMAX, JMAX, 4, 0.0);
     double Dt = 0.0;
@@ -59,7 +59,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             U[i][j][0] = rho[i][j];                                                              // U1
             U[i][j][1] = rho[i][j] * u[i][j];                                                    // U2
             U[i][j][2] = rho[i][j] * v[i][j];                                                    // U3
-            U[i][j][3] = rho[i][j] * (e[i][j] + (u[i][j] * u[i][j] + v[i][j] * v[i][j]) / 2.0);  // U5
+            U[i][j][3] = rho[i][j] * (e[i][j] + 0.5 * (u[i][j] * u[i][j] + v[i][j] * v[i][j]));  // U5
         }
     }
     // 为计算E,计算每个点上的切应力和热流量
@@ -71,7 +71,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             E[i][j][0] = rho[i][j] * u[i][j];                                    // E1
             E[i][j][1] = rho[i][j] * u[i][j] * u[i][j] + p[i][j] - Tauxx[i][j];  // E2
             E[i][j][2] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];            // E3
-            E[i][j][3] = (U[i][j][3] + p[i][j]) - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
+            E[i][j][3] =
+                (U[i][j][3] + p[i][j]) * u[i][j] - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
         }
     }
     // 为计算F,计算每个点上的切应力和热流量
@@ -83,7 +84,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             F[i][j][0] = rho[i][j] * v[i][j];
             F[i][j][1] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];
             F[i][j][2] = rho[i][j] * v[i][j] * v[i][j] + p[i][j] - Tauyy[i][j];
-            F[i][j][3] = (U[i][j][3] + p[i][j]) - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
+            F[i][j][3] = (U[i][j][3] + p[i][j]) * v[i][j] - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
         }
     }
     // 预估步-前向差分(只计算内部网格点)
@@ -100,15 +101,14 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     //(这里插什么值都不要紧非0就行)
     for (int i = 0; i < IMAX - 1; i++) {
         for (int k = 0; k < 4; k++) {
-            pU[i][JMAX - 1][k] = pU[i][JMAX-2][k];
+            pU[i][JMAX - 1][k] = pU[i][JMAX - 2][k];
         }
     }
-    for(int j=0;j<JMAX;j++){
-        for(int k=0;k<4;k++){
-            pU[IMAX-1][j][k] = pU[IMAX-2][j][k];
+    for (int j = 0; j < JMAX; j++) {
+        for (int k = 0; k < 4; k++) {
+            pU[IMAX - 1][j][k] = pU[IMAX - 2][j][k];
         }
     }
-
 
     pQ = Calc_Prim(pU);
     // 应用边界条件
@@ -138,7 +138,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             E[i][j][0] = rho[i][j] * u[i][j];                                    // E1
             E[i][j][1] = rho[i][j] * u[i][j] * u[i][j] + p[i][j] - Tauxx[i][j];  // E2
             E[i][j][2] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];            // E3
-            E[i][j][3] = (U[i][j][3] + p[i][j]) - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
+            E[i][j][3] =
+                (U[i][j][3] + p[i][j]) * u[i][j] - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
         }
     }
     // 为计算F,计算每个点上的切应力和热流量
@@ -150,7 +151,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             F[i][j][0] = rho[i][j] * v[i][j];
             F[i][j][1] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];
             F[i][j][2] = rho[i][j] * v[i][j] * v[i][j] + p[i][j] - Tauyy[i][j];
-            F[i][j][3] = (U[i][j][3] + p[i][j]) - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
+            F[i][j][3] = (U[i][j][3] + p[i][j]) * v[i][j] - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
         }
     }
     // 校正步-后向差分(只计算内部网格点)

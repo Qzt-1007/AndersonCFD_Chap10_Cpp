@@ -12,8 +12,6 @@ double SutVis(double T) {
 
 double Therm_k(double SutVis) { return SutVis * Cp / Pr; }
 
-double Rho(double p, double T) { return p / (R * T); }
-
 double Sonic(double T) { return sqrt(gamma * R * T); }
 
 // 根据U反解出原始量(Q:u,v,p,t)
