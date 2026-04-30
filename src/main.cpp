@@ -14,8 +14,8 @@ void saveSurfacePressure(const Array3D& Q, int Iter, const std::string& filename
         std::cerr << "警告：无法创建，请确保目录存在！\n";
     }
     outFile << "# Converged surface pressure at iteration " << Iter << "\n";
-    outFile << "i" << "\t" << "p" << "\n";
-    for (int i = 0; i < IMAX; ++i) outFile << i << "\t" << Q[i][0][2] << "\n";
+    outFile << "i" << "\t" << "p/p0" << "\n";
+    for (int i = 0; i < IMAX; ++i) outFile << i << "\t" << Q[i][0][2]/p0 << "\n";
 }
 
 int main() {
@@ -46,8 +46,8 @@ int main() {
         }
         if (Conver(rho, rho1)) {
             Q = Q1;
-            //saveSurfacePressure(Q, Iter, "pressure_isothermal.csv");
-            saveSurfacePressure(Q,Iter,"pressure_adiabatic.csv");
+            saveSurfacePressure(Q, Iter, "pressure_isothermal.csv");
+            //saveSurfacePressure(Q,Iter,"pressure_adiabatic.csv");
             break;
         } else {
             Q = Q1;
