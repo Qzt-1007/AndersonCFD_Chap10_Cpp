@@ -2,8 +2,6 @@
 #include <FArray.h>
 #include <constant.h>
 
-#include <cmath>
-
 double SutVis(double T) {
     double pTa = T / T0;
     double pTb = (T0 + 110.0) / (T + 110.0);

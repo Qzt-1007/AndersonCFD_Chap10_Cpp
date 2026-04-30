@@ -67,7 +67,7 @@ int main() {
         }
         if (Iter == 1 || Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
 
-        if (Iter == 1 || Iter % 100 == 0) {
+        if (Iter == 1 || Iter % 500 == 0) {
             outputSurfacePressure(Q, Iter);  // 输出迭代后的结果
         }
         checkNaN(Q, "aaa", Iter);

@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-
 // 定义2D/3D数组及其初始化方法
 
 // 2D 数组类型别名
