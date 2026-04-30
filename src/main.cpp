@@ -21,6 +21,17 @@ void outputSurfacePressure(const Array3D& Q, int Iter) {
     std::cout << std::endl;
 }
 
+auto checkNaN = [](const Array3D& arr, const char* name, int iter) {
+    for (int i = 0; i < IMAX; i++)
+        for (int j = 0; j < JMAX; j++)
+            for (int k = 0; k < 4; k++)
+                if (std::isnan(arr[i][j][k])) {
+                    std::cout << "NaN in " << name << " at (" << i << "," << j << "," << k << ") iter=" << iter
+                              << std::endl;
+                    return;
+                }
+};
+
 int main() {
     Array3D Q = createArray3D(IMAX, JMAX, 4);  // u,v,p,T
     Array3D Q1 = createArray3D(IMAX, JMAX, 4);
@@ -49,15 +60,17 @@ int main() {
         }
         if (Conver(rho, rho1)) {
             Q = Q1;
+            outputSurfacePressure(Q, Iter);
             break;
         } else {
             Q = Q1;
         }
         if (Iter == 1 || Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
 
-        if (Iter == 1 || Iter % 1000 == 0) {
-            outputSurfacePressure(Q1, Iter);  // 输出迭代后的结果
+        if (Iter == 1 || Iter % 100 == 0) {
+            outputSurfacePressure(Q, Iter);  // 输出迭代后的结果
         }
+        checkNaN(Q, "aaa", Iter);
     }
     return 0;
 }

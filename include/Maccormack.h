@@ -2,7 +2,6 @@
 #pragma once
 #include <BoundaryCond.h>
 #include <FArray.h>
-#include <Tstep.h>
 #include <VisStress.h>
 #include <calfunc.h>
 #include <constant.h>
@@ -33,8 +32,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     Array2D qx = createArray2D(IMAX, JMAX, 0.0);
     Array2D qy = createArray2D(IMAX, JMAX, 0.0);
 
-    Array3D pU = createArray3D(IMAX, JMAX, 4, 0.0001);
-    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0001);
+    Array3D pU = createArray3D(IMAX, JMAX, 4, 0.001);//避免出现除零
+    Array3D pQ = createArray3D(IMAX, JMAX, 4, 0.0);
 
     Array3D ResQ = createArray3D(IMAX, JMAX, 4, 0.0);
     double Dt = 0.0;
@@ -97,19 +96,6 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             }
         }
     }
-    // 对pU的边界采取插值处理
-    //(这里插什么值都不要紧非0就行)
-    for (int i = 0; i < IMAX - 1; i++) {
-        for (int k = 0; k < 4; k++) {
-            pU[i][JMAX - 1][k] = pU[i][JMAX - 2][k];
-        }
-    }
-    for (int j = 0; j < JMAX; j++) {
-        for (int k = 0; k < 4; k++) {
-            pU[IMAX - 1][j][k] = pU[IMAX - 2][j][k];
-        }
-    }
-
     pQ = Calc_Prim(pU);
     // 应用边界条件
     pQ = ApplyBoundaryCond(pQ);

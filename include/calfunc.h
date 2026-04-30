@@ -21,9 +21,25 @@ Array3D Calc_Prim(Array3D U) {
         for (int j = 0; j < JMAX; j++) {
             Q[i][j][0] = U[i][j][1] / U[i][j][0];
             Q[i][j][1] = U[i][j][2] / U[i][j][0];
-            Q[i][j][3] = (U[i][j][3] / U[i][j][0] - 0.50 * (Q[i][j][0] * Q[i][j][0] + Q[i][j][1] * Q[i][j][1])) / Cv;
+            Q[i][j][3] = ((U[i][j][3] / U[i][j][0]) - 0.50 * (Q[i][j][0] * Q[i][j][0] + Q[i][j][1] * Q[i][j][1])) / Cv;
             Q[i][j][2] = U[i][j][0] * R * Q[i][j][3];
         }
     }
     return Q;
+}
+
+// 计算时间步长
+double Tstep(Array2D u, Array2D v, Array2D p, Array2D T) {
+    double vd = 0.0;
+    double deltaT;
+    double deltaTmin = 1e9;
+    for (int i = 1; i < IMAX - 1; i++) {
+        for (int j = 1; j < JMAX - 1; j++) {
+            vd = (4.0 * gamma * SutVis(T[i][j])) / (3 * Pr * p[i][j] / R / T[i][j]);
+            deltaT = 1.0 / (abs(u[i][j]) / Dx + abs(v[i][j]) / Dy + Sonic(T[i][j]) * sqrt(1.0 / Dx / Dx + 1.0 / Dy / Dy) +
+                          2.0 * vd * (1.0 / Dx / Dx + 1 / Dy / Dy));
+            if (deltaT < deltaTmin) deltaTmin = deltaT;
+        }
+    }
+    return Cfl * deltaT;
 }

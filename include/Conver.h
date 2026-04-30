@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-constexpr double eps_p = 1e-6;
+constexpr double eps_p = 1e-8;
 
 bool Conver(Array2D rho1, Array2D rho2) {
     double drho = 1e-9;

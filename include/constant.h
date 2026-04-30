@@ -4,7 +4,7 @@
 
 const int IMAX = 70;
 const int JMAX = 70;
-const int MaxIter = 6000;
+const int MaxIter = 8000;
 
 const double Ma0 = 4.0;
 const double T0 = 288.16;  // 海平面温度，也是来流温度
