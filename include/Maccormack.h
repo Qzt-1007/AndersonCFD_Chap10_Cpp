@@ -6,6 +6,8 @@
 #include <calfunc.h>
 #include <constant.h>
 
+#include <fstream>
+
 // 计算热流量的函数
 Array2D q_x(Array2D, Array2D, int);
 Array2D q_y(Array2D, Array2D, int);
@@ -125,8 +127,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             E[i][j][0] = rho[i][j] * u[i][j];                                    // E1
             E[i][j][1] = rho[i][j] * u[i][j] * u[i][j] + p[i][j] - Tauxx[i][j];  // E2
             E[i][j][2] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];            // E3
-            E[i][j][3] =
-                (rho[i][j] * (e[i][j] + 0.5 * (u[i][j] * u[i][j] + v[i][j] * v[i][j])) + p[i][j]) * u[i][j] - u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
+            E[i][j][3] = (rho[i][j] * (e[i][j] + 0.5 * (u[i][j] * u[i][j] + v[i][j] * v[i][j])) + p[i][j]) * u[i][j] -
+                         u[i][j] * Tauxx[i][j] - v[i][j] * Tauxy[i][j] + qx[i][j];  // E5
         }
     }
     // 为计算F,计算每个点上的切应力和热流量
@@ -138,7 +140,8 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
             F[i][j][0] = rho[i][j] * v[i][j];
             F[i][j][1] = rho[i][j] * u[i][j] * v[i][j] - Tauxy[i][j];
             F[i][j][2] = rho[i][j] * v[i][j] * v[i][j] + p[i][j] - Tauyy[i][j];
-            F[i][j][3] = (rho[i][j] * (e[i][j] + 0.5 * (u[i][j] * u[i][j] + v[i][j] * v[i][j])) + p[i][j]) * v[i][j] - v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
+            F[i][j][3] = (rho[i][j] * (e[i][j] + 0.5 * (u[i][j] * u[i][j] + v[i][j] * v[i][j])) + p[i][j]) * v[i][j] -
+                         v[i][j] * Tauyy[i][j] - u[i][j] * Tauxy[i][j] + qy[i][j];
         }
     }
     // 校正步-后向差分(只计算内部网格点)
@@ -192,8 +195,8 @@ Array2D q_y(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (j == JMAX - 1) {
-                    // q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j - 1] - T[i][j - 2]) / (2 * Dy);
-                    q[i][j] = -k[i][j] * (T[i][j] - T[i][j - 1]) / Dy;
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j - 1] - T[i][j - 2]) / (2 * Dy);
+                    // q[i][j] = -k[i][j] * (T[i][j] - T[i][j - 1]) / Dy;
                 } else {
                     q[i][j] = -k[i][j] * (T[i][j + 1] - T[i][j]) / Dy;
                 }
@@ -203,8 +206,8 @@ Array2D q_y(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (j == 0) {
-                    // q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j + 1] - T[i][j + 2]) / (2 * Dy);
-                    q[i][j] = -k[i][j] * (T[i][j + 1] - T[i][j]) / Dy;
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i][j + 1] - T[i][j + 2]) / (2 * Dy);
+                    // q[i][j] = -k[i][j] * (T[i][j + 1] - T[i][j]) / Dy;
                 } else {
                     q[i][j] = -k[i][j] * (T[i][j] - T[i][j - 1]) / Dy;
                 }

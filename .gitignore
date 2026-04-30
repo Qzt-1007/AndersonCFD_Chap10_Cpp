@@ -6,6 +6,7 @@
 *.so
 *.a
 *.lib
+*.xlsx
 
 # 可执行文件
 /bin/

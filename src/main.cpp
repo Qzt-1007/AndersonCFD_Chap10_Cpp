@@ -4,33 +4,19 @@
 #include <calfunc.h>
 #include <constant.h>
 
-#include <cmath>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <vector>
 
-// 输出物面压力分布
-void outputSurfacePressure(const Array3D& Q, int Iter) {
-    std::cout << "\n========== 迭代步 " << Iter << " ==========\n";
-    std::cout << "物面 (j=0) 压力分布 p[i][0]:\n";
-    std::cout << std::setw(6) << "i" << std::setw(15) << "p" << std::endl;
-    for (int i = 0; i < IMAX; ++i) {
-        double p_surface = Q[i][0][2];  // Q[i][j][2] 存储压力
-        std::cout << std::setw(6) << i << std::setw(15) << p_surface << std::endl;
+void saveSurfacePressure(const Array3D& Q, int Iter, const std::string& filename) {
+    std::ofstream outFile("../output/" + filename);
+    if (!outFile) {
+        std::cerr << "警告：无法创建，请确保目录存在！\n";
     }
-    std::cout << std::endl;
+    outFile << "# Converged surface pressure at iteration " << Iter << "\n";
+    outFile << "i" << "\t" << "p" << "\n";
+    for (int i = 0; i < IMAX; ++i) outFile << i << "\t" << Q[i][0][2] << "\n";
 }
-
-auto checkNaN = [](const Array3D& arr, const char* name, int iter) {
-    for (int i = 0; i < IMAX; i++)
-        for (int j = 0; j < JMAX; j++)
-            for (int k = 0; k < 4; k++)
-                if (std::isnan(arr[i][j][k])) {
-                    std::cout << "NaN in " << name << " at (" << i << "," << j << "," << k << ") iter=" << iter
-                              << std::endl;
-                    return;
-                }
-};
 
 int main() {
     Array3D Q = createArray3D(IMAX, JMAX, 4);  // u,v,p,T
@@ -47,7 +33,7 @@ int main() {
             Q[ii][jj][3] = T0;        // T
         }
     }
-    // 边界条件
+    // 边界条件(默认为恒温壁边界条件)
     Q = ApplyBoundaryCond(Q);
 
     for (int Iter = 1; Iter < MaxIter + 1; Iter++) {
@@ -60,17 +46,13 @@ int main() {
         }
         if (Conver(rho, rho1)) {
             Q = Q1;
-            outputSurfacePressure(Q, Iter);
+            //saveSurfacePressure(Q, Iter, "pressure_isothermal.csv");
+            saveSurfacePressure(Q,Iter,"pressure_adiabatic.csv");
             break;
         } else {
             Q = Q1;
         }
-        if (Iter == 1 || Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
-
-        if (Iter == 1 || Iter % 500 == 0) {
-            outputSurfacePressure(Q, Iter);  // 输出迭代后的结果
-        }
-        checkNaN(Q, "aaa", Iter);
+        if (Iter % 100 == 0) std::cout << "Iter = " << Iter << std::endl;
     }
     return 0;
 }
