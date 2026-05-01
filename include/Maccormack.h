@@ -11,8 +11,9 @@
 // 计算热流量的函数
 Array2D q_x(Array2D, Array2D, int);
 Array2D q_y(Array2D, Array2D, int);
+Array3D Maccormack(Array3D Q,int w = 0); // 0:等温,1:绝热
 
-Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
+Array3D Maccormack(Array3D Q,int w)  // Q:u,v,p,T
 {
     Array2D u = createArray2D(IMAX, JMAX, 0.0);
     Array2D v = createArray2D(IMAX, JMAX, 0.0);
@@ -101,7 +102,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
     }
     pQ = Calc_Prim(pU);
     // 应用边界条件
-    pQ = ApplyBoundaryCond(pQ);
+    pQ = ApplyBoundaryCond(pQ,w);
 
     // 预估步更新
     for (int i = 0; i < IMAX; i++) {
@@ -154,7 +155,7 @@ Array3D Maccormack(Array3D Q)  // Q:u,v,p,T
         }
     }
     ResQ = Calc_Prim(U);
-    ResQ = ApplyBoundaryCond(ResQ);
+    ResQ = ApplyBoundaryCond(ResQ,w);
 
     return ResQ;
 }

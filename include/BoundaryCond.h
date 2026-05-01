@@ -2,7 +2,9 @@
 #include <FArray.h>
 #include <constant.h>
 
-Array3D ApplyBoundaryCond(Array3D Q) {  // Q:u,v,p,T
+Array3D ApplyBoundaryCond(Array3D Q, int walltype = 0);  // 0:等温,1:绝热
+
+Array3D ApplyBoundaryCond(Array3D Q, int walltype) {  // Q:u,v,p,T
     // 1.前缘与入流条件
     for (int j = 0; j < JMAX; j++) {
         if (j == 0)
@@ -33,10 +35,13 @@ Array3D ApplyBoundaryCond(Array3D Q) {  // Q:u,v,p,T
         Q[i][0][0] = 0.0;
         Q[i][0][1] = 0.0;
         Q[i][0][2] = 2 * Q[i][1][2] - Q[i][2][2];
-        //恒温壁条件
-        Q[i][0][3] = Tw;
-        //绝热壁条件
-        //Q[i][0][3] = (4.0*Q[i][1][3]-Q[i][2][3])/3.0;
+        // 恒温壁条件
+        if (walltype == 0) Q[i][0][3] = Tw;
+        // 绝热壁条件
+        else if (walltype == 1)
+            Q[i][0][3] = (4.0 * Q[i][1][3] - Q[i][2][3]) / 3.0;
+        else
+            throw std::runtime_error("walltype should only be 0 or 1.");
     }
     return Q;
 }
