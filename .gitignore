@@ -14,7 +14,6 @@
 /build/
 /Debug/
 /Release/
-/output/
 
 # IDE 配置文件
 .vscode/

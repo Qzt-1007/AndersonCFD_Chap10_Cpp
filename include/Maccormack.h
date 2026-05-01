@@ -11,9 +11,9 @@
 // 计算热流量的函数
 Array2D q_x(Array2D, Array2D, int);
 Array2D q_y(Array2D, Array2D, int);
-Array3D Maccormack(Array3D Q,int w = 0); // 0:等温,1:绝热
+Array3D Maccormack(Array3D Q, int w = 0);  // 0:等温,1:绝热
 
-Array3D Maccormack(Array3D Q,int w)  // Q:u,v,p,T
+Array3D Maccormack(Array3D Q, int w)  // Q:u,v,p,T
 {
     Array2D u = createArray2D(IMAX, JMAX, 0.0);
     Array2D v = createArray2D(IMAX, JMAX, 0.0);
@@ -102,7 +102,7 @@ Array3D Maccormack(Array3D Q,int w)  // Q:u,v,p,T
     }
     pQ = Calc_Prim(pU);
     // 应用边界条件
-    pQ = ApplyBoundaryCond(pQ,w);
+    pQ = ApplyBoundaryCond(pQ, w);
 
     // 预估步更新
     for (int i = 0; i < IMAX; i++) {
@@ -155,7 +155,7 @@ Array3D Maccormack(Array3D Q,int w)  // Q:u,v,p,T
         }
     }
     ResQ = Calc_Prim(U);
-    ResQ = ApplyBoundaryCond(ResQ,w);
+    ResQ = ApplyBoundaryCond(ResQ, w);
 
     return ResQ;
 }
@@ -166,8 +166,8 @@ Array2D q_x(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (i == IMAX - 1) {
-                    // q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i - 1][j] - T[i - 2][j]) / (2 * Dx);
-                    q[i][j] = -k[i][j] * (T[i][j] - T[i - 1][j]) / Dx;
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i - 1][j] - T[i - 2][j]) / (2 * Dx);
+                    // q[i][j] = -k[i][j] * (T[i][j] - T[i - 1][j]) / Dx;
                 } else {
                     q[i][j] = -k[i][j] * (T[i + 1][j] - T[i][j]) / Dx;
                 }
@@ -177,8 +177,8 @@ Array2D q_x(Array2D T, Array2D k, int indi = 0) {
         for (int i = 0; i < IMAX; i++) {
             for (int j = 0; j < JMAX; j++) {
                 if (i == 0) {
-                    // q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i + 1][j] - T[i + 2][j]) / (2 * Dx);
-                    q[i][j] = -k[i][j] * (T[i + 1][j] - T[i][j]) / Dx;
+                    q[i][j] = -k[i][j] * (-3 * T[i][j] + 4 * T[i + 1][j] - T[i + 2][j]) / (2 * Dx);
+                    // q[i][j] = -k[i][j] * (T[i + 1][j] - T[i][j]) / Dx;
                 } else {
                     q[i][j] = -k[i][j] * (T[i][j] - T[i - 1][j]) / Dx;
                 }
