@@ -8,16 +8,6 @@
 #include <iomanip>
 #include <iostream>
 
-// 输出物面无量纲压力分布
-void saveSurfacePressure(const Array3D& Q, int Iter, const std::string& filename) {
-    std::ofstream outFile("../output/" + filename);
-    if (!outFile) {
-        std::cerr << "警告：无法创建，请确保目录存在！\n";
-    }
-    outFile << "i" << "\t" << "p/p0" << "\n";
-    for (int i = 0; i < IMAX; ++i) outFile << i << "\t" << Q[i][0][2] / p0 << "\n";
-}
-
 // 输出全场 u,v,p,T 到四个CSV文件（每个文件名带后缀）
 void saveAllFields(const Array3D& Q, const std::string& suffix) {
     std::string outputDir = "../output/";
@@ -25,6 +15,10 @@ void saveAllFields(const Array3D& Q, const std::string& suffix) {
     std::ofstream vFile(outputDir + "v_dist_" + suffix + ".csv");
     std::ofstream pFile(outputDir + "p_dist_" + suffix + ".csv");
     std::ofstream TFile(outputDir + "T_dist_" + suffix + ".csv");
+    uFile<<std::fixed<<std::setprecision(3);
+    vFile<<std::fixed<<std::setprecision(3);
+    pFile<<std::fixed<<std::setprecision(3);
+    TFile<<std::fixed<<std::setprecision(3);
 
     if (!uFile || !vFile || !pFile || !TFile) {
         std::cerr << "错误：无法创建输出文件，请确保目录 " << outputDir << " 存在！\n";
@@ -33,7 +27,7 @@ void saveAllFields(const Array3D& Q, const std::string& suffix) {
 
     // 表头：第一行显示列索引 i
     auto writeHeader = [](std::ofstream& file) {
-        file << "j\\i";
+        file << "j";
         for (int i = 0; i < IMAX; ++i) file << "," << i;
         file << "\n";
     };
@@ -41,6 +35,7 @@ void saveAllFields(const Array3D& Q, const std::string& suffix) {
     writeHeader(vFile);
     writeHeader(pFile);
     writeHeader(TFile);
+    
 
     // 写入数据：外层循环 j（行），内层循环 i（列）
     for (int j = 0; j < JMAX; ++j) {
@@ -50,10 +45,10 @@ void saveAllFields(const Array3D& Q, const std::string& suffix) {
         TFile << j;
 
         for (int i = 0; i < IMAX; ++i) {
-            uFile << "," << Q[i][j][0];
-            vFile << "," << Q[i][j][1];
-            pFile << "," << Q[i][j][2];
-            TFile << "," << Q[i][j][3];
+            uFile << "," << Q[i][j][0]/a0;
+            vFile << "," << Q[i][j][1]/a0;
+            pFile << "," << Q[i][j][2]/p0;
+            TFile << "," << Q[i][j][3]/T0;
         }
 
         uFile << "\n";
