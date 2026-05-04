@@ -7,7 +7,7 @@
 *.a
 *.lib
 *.xlsx
-.Ds_Store
+.DS_Store
 
 # 可执行文件
 /bin/
